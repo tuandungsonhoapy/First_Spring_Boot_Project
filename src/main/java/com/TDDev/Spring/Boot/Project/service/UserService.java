@@ -12,17 +12,23 @@ import com.TDDev.Spring.Boot.Project.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
@@ -43,6 +49,7 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers(){
         List<UserResponse> userResponseList = new ArrayList<>();
         for (User user : userRepository.findAll()){
@@ -51,9 +58,33 @@ public class UserService {
         return userResponseList;
     }
 
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String userId){
+//        var authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        AtomicBoolean checkAdmin = new AtomicBoolean(false);
+//
+//        authentication.getAuthorities().forEach(grantedAuthority -> {
+//            if(grantedAuthority.getAuthority().equals("ROLE_" + Role.ADMIN.name()))
+//                checkAdmin.set(true);
+//        });
+//
+//        User user = userRepository.findByUsername(authentication.getName())
+//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+//
+//        log.info(String.valueOf(checkAdmin.get()));
+//        if((!user.getId().equals(userId)) && (!checkAdmin.get()))
+//            throw new AppException(ErrorCode.DO_NOT_PERMISSION);
+
         return userMapper.toUserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found!")));
+    }
+
+    public UserResponse getMyInfo(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userMapper.toUserResponse(userRepository
+                .findByUsername(authentication.getName())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
     }
 
     public UserResponse updateUser(String userId, UserUpdateRequest request){

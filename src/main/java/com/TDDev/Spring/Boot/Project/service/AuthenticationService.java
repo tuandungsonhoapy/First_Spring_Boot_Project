@@ -4,7 +4,6 @@ import com.TDDev.Spring.Boot.Project.dto.request.Authentication.AuthenticationRe
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.IntrospectRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.AuthenticationResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.IntrospectResponse;
-import com.TDDev.Spring.Boot.Project.dto.response.UserResponse;
 import com.TDDev.Spring.Boot.Project.entity.User;
 import com.TDDev.Spring.Boot.Project.exception.AppException;
 import com.TDDev.Spring.Boot.Project.exception.ErrorCode;
@@ -25,7 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
@@ -68,13 +66,13 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest){
         var user = userRepository.findByUsername(authenticationRequest.getUsername())
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_AUTH));
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
         boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword());
 
         if(!authenticated)
-            throw new AppException(ErrorCode.INVALID_AUTH);
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
 
 
         return AuthenticationResponse.builder()

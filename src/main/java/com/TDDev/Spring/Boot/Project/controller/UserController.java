@@ -10,11 +10,14 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,6 +34,11 @@ public class UserController {
 
     @GetMapping("/users")
     ApiResponse<List<UserResponse>> getUsers(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        log.info("Username: {}", authentication.getName());
+        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+
         ApiResponse<List<UserResponse>> apiResponse = new ApiResponse<>();
         apiResponse.setMessage("Get users successful!");
         apiResponse.setResult(userService.getUsers());
@@ -59,5 +67,13 @@ public class UserController {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setMessage("Delete user successful!");
         return apiResponse;
+    }
+
+    @GetMapping("/my-info")
+    ApiResponse<UserResponse> getMyInfo(){
+        return ApiResponse.<UserResponse>builder()
+                .message("Get your info successful!")
+                .result(userService.getMyInfo())
+                .build();
     }
 }
