@@ -59,4 +59,13 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
         return ResponseEntity.badRequest().body(apiResponse);
     }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    ResponseEntity<ApiResponse> handleIllegalArgumentException(Exception exception){
+        ErrorCode errorCode = ErrorCode.SERVICE_UNAVAILABLE;
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(ApiResponse.builder()
+                        .code(errorCode.getCode())
+                        .message(errorCode.getMessage())
+                .build());
+    }
 }

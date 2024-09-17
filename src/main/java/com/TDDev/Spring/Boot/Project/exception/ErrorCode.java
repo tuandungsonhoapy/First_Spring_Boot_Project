@@ -10,8 +10,10 @@ public enum ErrorCode {
     MIN_INVALID_PASSWORD(1002, "Password must be at least 6 characters!", HttpStatus.BAD_REQUEST),
     INVALID_KEY(1003, "Invalid key of ErrorCode", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(1004, "User not found!", HttpStatus.NOT_FOUND),
-    UNAUTHENTICATED(1005, "Username or password is invalid!", HttpStatus.NOT_FOUND),
-    UNAUTHORIZED(1006, "You don't have permission!", HttpStatus.FORBIDDEN)
+    UNAUTHENTICATED(1005, "Invalid login information!", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(1006, "You don't have permission!", HttpStatus.FORBIDDEN),
+    SERVICE_UNAVAILABLE(1007, "Service is unavailable!", HttpStatus.SERVICE_UNAVAILABLE),
+    PERMISSION_EXISTED(1008, "Permission existed!", HttpStatus.BAD_REQUEST)
     ;
     private final int code;
     private final String message;
