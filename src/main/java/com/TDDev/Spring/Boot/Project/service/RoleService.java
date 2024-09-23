@@ -3,6 +3,8 @@ package com.TDDev.Spring.Boot.Project.service;
 import com.TDDev.Spring.Boot.Project.dto.request.RoleRequest.RoleRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.RoleResponse;
 import com.TDDev.Spring.Boot.Project.entity.Role;
+import com.TDDev.Spring.Boot.Project.exception.AppException;
+import com.TDDev.Spring.Boot.Project.exception.ErrorCode;
 import com.TDDev.Spring.Boot.Project.mapper.RoleMapper;
 import com.TDDev.Spring.Boot.Project.repository.PermissionRepository;
 import com.TDDev.Spring.Boot.Project.repository.RoleRepository;
@@ -25,6 +27,8 @@ public class RoleService {
     PermissionRepository permissionRepository;
 
     public RoleResponse create(RoleRequest request){
+        if(roleRepository.findById(request.getName()).isPresent())
+            throw new AppException(ErrorCode.ROLE_EXISTED);
         var permissions = permissionRepository.findAllById(request.getPermissions());
         Role role = roleMapper.toRole(request);
         role.setPermissions(new HashSet<>(permissions));

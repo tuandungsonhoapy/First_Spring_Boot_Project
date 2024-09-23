@@ -1,6 +1,5 @@
 package com.TDDev.Spring.Boot.Project.dto.response;
 
-import com.TDDev.Spring.Boot.Project.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,5 +17,5 @@ public class UserResponse {
     String firstName;
     String lastName;
     LocalDate dob;
-    Set<Role> roles;
+    Set<RoleResponse> roles;
 }

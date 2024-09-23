@@ -5,6 +5,7 @@ import com.TDDev.Spring.Boot.Project.dto.request.UserRequest.UserUpdateRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.UserResponse;
 import com.TDDev.Spring.Boot.Project.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
@@ -14,6 +15,7 @@ public interface UserMapper {
 
     UserResponse toUserResponse(User user);
 
+    @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 
 }

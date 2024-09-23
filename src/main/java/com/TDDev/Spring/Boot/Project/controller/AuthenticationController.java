@@ -2,6 +2,8 @@ package com.TDDev.Spring.Boot.Project.controller;
 
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.AuthenticationRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.IntrospectRequest;
+import com.TDDev.Spring.Boot.Project.dto.request.LogoutRequest.LogoutRequest;
+import com.TDDev.Spring.Boot.Project.dto.request.RefreshTokenRequest.RefreshTokenRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.ApiResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.AuthenticationResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.IntrospectResponse;
@@ -38,6 +40,22 @@ public class AuthenticationController {
         return ApiResponse.<IntrospectResponse>builder()
                 .message("Introspect successful!")
                 .result(authenticationService.introspect(request))
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
+                .message("Logout successful!")
+                .build();
+    }
+
+    @PostMapping("/refresh-token")
+    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request) throws ParseException, JOSEException {
+        return ApiResponse.<AuthenticationResponse>builder()
+                .message("Refresh token successful!")
+                .result(authenticationService.refreshToken(request))
                 .build();
     }
 }

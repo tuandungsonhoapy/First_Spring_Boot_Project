@@ -1,6 +1,6 @@
 package com.TDDev.Spring.Boot.Project.dto.request.UserRequest;
 
-import com.TDDev.Spring.Boot.Project.exception.ErrorCode;
+import com.TDDev.Spring.Boot.Project.validator.DobValidator.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,5 +19,7 @@ public class UserCreationRequest {
     String password;
     String firstName;
     String lastName;
+
+    @DobConstraint(min = 16, message = "INVALID_DOB")
     LocalDate dob;
 }
