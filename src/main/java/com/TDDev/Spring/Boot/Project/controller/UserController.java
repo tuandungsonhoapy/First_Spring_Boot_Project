@@ -1,21 +1,22 @@
 package com.TDDev.Spring.Boot.Project.controller;
 
+import java.util.List;
+
+import jakarta.validation.Valid;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
 import com.TDDev.Spring.Boot.Project.dto.request.UserRequest.UserCreationRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.UserRequest.UserUpdateRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.ApiResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.UserResponse;
-import com.TDDev.Spring.Boot.Project.entity.User;
 import com.TDDev.Spring.Boot.Project.service.UserService;
-import jakarta.validation.Valid;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,7 +26,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/create-user")
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setResult(userService.createUser(request));
         apiResponse.setMessage("Create user successful!");
@@ -33,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    ApiResponse<List<UserResponse>> getUsers(){
+    ApiResponse<List<UserResponse>> getUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         log.info("Username: {}", authentication.getName());
@@ -46,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId){
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setMessage("Get user successful!");
         apiResponse.setResult(userService.getUser(userId));
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request){
+    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
         apiResponse.setMessage("Update user successful!");
         apiResponse.setResult(userService.updateUser(userId, request));
@@ -62,7 +63,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{userId}")
-    ApiResponse deleteUser(@PathVariable String userId){
+    ApiResponse deleteUser(@PathVariable String userId) {
         userService.deleteUser(userId);
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setMessage("Delete user successful!");
@@ -70,7 +71,7 @@ public class UserController {
     }
 
     @GetMapping("/my-info")
-    ApiResponse<UserResponse> getMyInfo(){
+    ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .message("Get your info successful!")
                 .result(userService.getMyInfo())

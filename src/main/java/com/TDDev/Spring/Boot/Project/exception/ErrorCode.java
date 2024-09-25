@@ -1,7 +1,8 @@
 package com.TDDev.Spring.Boot.Project.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
@@ -15,8 +16,7 @@ public enum ErrorCode {
     SERVICE_UNAVAILABLE(1007, "Service is unavailable!", HttpStatus.SERVICE_UNAVAILABLE),
     PERMISSION_EXISTED(1008, "Permission existed!", HttpStatus.BAD_REQUEST),
     ROLE_EXISTED(1009, "Role existed!", HttpStatus.BAD_REQUEST),
-    INVALID_DOB(1010, "Your age must be at least {min}!", HttpStatus.BAD_REQUEST)
-    ;
+    INVALID_DOB(1010, "Your age must be at least {min}!", HttpStatus.BAD_REQUEST);
     private final int code;
     private final String message;
     private final HttpStatus httpStatus;
@@ -26,5 +26,4 @@ public enum ErrorCode {
         this.message = message;
         this.httpStatus = httpStatus;
     }
-
 }

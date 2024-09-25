@@ -1,11 +1,13 @@
 package com.TDDev.Spring.Boot.Project.dto.request.UserRequest;
 
-import com.TDDev.Spring.Boot.Project.validator.DobValidator.DobConstraint;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Size;
+
+import com.TDDev.Spring.Boot.Project.validator.DobValidator.DobConstraint;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +19,7 @@ public class UserCreationRequest {
 
     @Size(min = 6, message = "MIN_INVALID_PASSWORD")
     String password;
+
     String firstName;
     String lastName;
 
