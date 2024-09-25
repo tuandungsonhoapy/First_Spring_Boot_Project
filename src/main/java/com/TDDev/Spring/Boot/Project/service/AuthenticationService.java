@@ -5,9 +5,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import com.TDDev.Spring.Boot.Project.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthenticationService {
     UserRepository userRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
+    UserMapper userMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
@@ -59,10 +62,7 @@ public class AuthenticationService {
     @Value("${jwt.refresh-duration}")
     protected long REFRESH_DURATION;
 
-    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
-        var token = request.getToken();
-
-        logger.info(token);
+    public IntrospectResponse introspect(String token) throws JOSEException, ParseException {
 
         try {
             verifyToken(token, false);
@@ -77,6 +77,7 @@ public class AuthenticationService {
         var user = userRepository
                 .findByUsername(authenticationRequest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
         boolean authenticated = passwordEncoder.matches(authenticationRequest.getPassword(), user.getPassword());
@@ -86,6 +87,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(generateToken(user))
                 .authenticated(true)
+                .userResponse(userMapper.toUserResponse(user))
                 .build();
     }
 
