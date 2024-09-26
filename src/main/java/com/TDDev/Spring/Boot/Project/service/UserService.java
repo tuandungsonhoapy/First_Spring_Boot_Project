@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import com.TDDev.Spring.Boot.Project.entity.Role;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,10 +42,10 @@ public class UserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        //        HashSet<String> roles = new HashSet<>();
-        //        roles.add(Role.USER.name());
+        var role = roleRepository.findById("CUSTOMER")
+                .orElseThrow(() -> new AppException(ErrorCode.SERVER_ERROR));
 
-        // user.setRoles(roles);
+        user.setRole(role);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -60,22 +61,6 @@ public class UserService {
 
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String userId) {
-        //        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        //
-        //        AtomicBoolean checkAdmin = new AtomicBoolean(false);
-        //
-        //        authentication.getAuthorities().forEach(grantedAuthority -> {
-        //            if(grantedAuthority.getAuthority().equals("ROLE_" + Role.ADMIN.name()))
-        //                checkAdmin.set(true);
-        //        });
-        //
-        //        User user = userRepository.findByUsername(authentication.getName())
-        //                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        //
-        //        log.info(String.valueOf(checkAdmin.get()));
-        //        if((!user.getId().equals(userId)) && (!checkAdmin.get()))
-        //            throw new AppException(ErrorCode.DO_NOT_PERMISSION);
-
         return userMapper.toUserResponse(
                 userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!")));
     }
@@ -93,8 +78,9 @@ public class UserService {
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        var roles = roleRepository.findAllById(request.getRoles());
-        user.setRoles(new HashSet<>(roles));
+        var role = roleRepository.findById(request.getRole())
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+        user.setRole(role);
 
         return userMapper.toUserResponse(userRepository.save(user));
     }

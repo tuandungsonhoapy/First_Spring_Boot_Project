@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.AuthenticationRequest;
-import com.TDDev.Spring.Boot.Project.dto.request.LogoutRequest.LogoutRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.RefreshTokenRequest.RefreshTokenRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.ApiResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.AuthenticationResponse;
@@ -68,8 +67,26 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
-        authenticationService.logout(request);
+    ApiResponse<Void> logout(HttpServletResponse response) throws ParseException, JOSEException {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Lấy JWT từ Authentication
+        Jwt jwt = (Jwt) authentication.getCredentials();
+
+        // Token trong JWT
+        String token = jwt.getTokenValue();
+
+        authenticationService.logout(token);
+
+        // Create a cookie with the same name as the token cookie and set its max age to 0
+        Cookie cookie = new Cookie("identityToken", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+
+        // Add the cookie to the response to delete it
+        response.addCookie(cookie);
+
         return ApiResponse.<Void>builder().message("Logout successful!").build();
     }
 

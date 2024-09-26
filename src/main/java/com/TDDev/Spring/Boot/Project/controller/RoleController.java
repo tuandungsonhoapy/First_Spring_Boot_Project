@@ -25,7 +25,7 @@ public class RoleController {
     @PostMapping("/create")
     ApiResponse<RoleResponse> create(@RequestBody RoleRequest roleRequest) {
         return ApiResponse.<RoleResponse>builder()
-                .message("Create role successful")
+                .message("Create role successfully")
                 .result(roleService.create(roleRequest))
                 .build();
     }
@@ -33,7 +33,7 @@ public class RoleController {
     @GetMapping
     ApiResponse<List<RoleResponse>> getAll() {
         return ApiResponse.<List<RoleResponse>>builder()
-                .message("Get roles successful!")
+                .message("Get roles successfully!")
                 .result(roleService.getAll())
                 .build();
     }
@@ -41,6 +41,14 @@ public class RoleController {
     @DeleteMapping("/delete/{role}")
     ApiResponse<Void> delete(@PathVariable String role) {
         roleService.delete(role);
-        return ApiResponse.<Void>builder().message("Delete role successful!").build();
+        return ApiResponse.<Void>builder().message("Delete role successfully!").build();
+    }
+
+    @PatchMapping("/update")
+    ApiResponse<RoleResponse> update(@RequestBody RoleRequest request){
+        return ApiResponse.<RoleResponse>builder()
+                .message("Update role successfully!")
+                .result(roleService.update(request))
+                .build();
     }
 }

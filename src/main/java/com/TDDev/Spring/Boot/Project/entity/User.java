@@ -1,7 +1,6 @@
 package com.TDDev.Spring.Boot.Project.entity;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -26,6 +25,7 @@ public class User {
     String lastName;
     LocalDate dob;
 
-    @ManyToMany
-    Set<Role> roles;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_name", referencedColumnName = "name")
+    Role role;
 }

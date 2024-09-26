@@ -2,9 +2,7 @@ package com.TDDev.Spring.Boot.Project.entity;
 
 import java.util.Set;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -23,5 +21,10 @@ public class Role {
     String description;
 
     @ManyToMany
+    @JoinTable(
+            name = "permission_role",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
     Set<Permission> permissions;
 }

@@ -117,27 +117,18 @@ public class AuthenticationService {
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        List<String> list = new ArrayList<>();
 
-        if (!CollectionUtils.isEmpty(user.getRoles()))
-            user.getRoles().forEach(role -> {
-                stringJoiner.add("ROLE_" + role.getName());
-                list.add(role.getName());
-                if (!CollectionUtils.isEmpty(role.getPermissions()))
-                    role.getPermissions().forEach(permission -> {
-                        if (!list.contains(permission.getName())) {
-                            stringJoiner.add(permission.getName());
-                            list.add(permission.getName());
-                        }
-                    });
-            });
+        if(Objects.nonNull(user.getRole())){
+            stringJoiner.add("ROLE_" + user.getRole().getName());
+            user.getRole().getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
+        }
 
         return stringJoiner.toString();
     }
 
-    public void logout(LogoutRequest request) throws ParseException, JOSEException {
+    public void logout(String token) throws ParseException, JOSEException {
         try {
-            var signedToken = verifyToken(request.getToken(), true);
+            var signedToken = verifyToken(token, true);
 
             String jit = signedToken.getJWTClaimsSet().getJWTID();
             Date expiryTime = signedToken.getJWTClaimsSet().getExpirationTime();

@@ -16,7 +16,11 @@ public enum ErrorCode {
     SERVICE_UNAVAILABLE(1007, "Service is unavailable!", HttpStatus.SERVICE_UNAVAILABLE),
     PERMISSION_EXISTED(1008, "Permission existed!", HttpStatus.BAD_REQUEST),
     ROLE_EXISTED(1009, "Role existed!", HttpStatus.BAD_REQUEST),
-    INVALID_DOB(1010, "Your age must be at least {min}!", HttpStatus.BAD_REQUEST);
+    INVALID_DOB(1010, "Your age must be at least {min}!", HttpStatus.BAD_REQUEST),
+    IMAGE_NOT_EXIST(1011, "Image does not exist!", HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(1012, "Product existed!", HttpStatus.BAD_REQUEST),
+    SERVER_ERROR(1111, "Server error!", HttpStatus.SERVICE_UNAVAILABLE),
+    ROLE_NOT_EXISTED(1013, "Role does not exist!", HttpStatus.BAD_REQUEST);
     private final int code;
     private final String message;
     private final HttpStatus httpStatus;

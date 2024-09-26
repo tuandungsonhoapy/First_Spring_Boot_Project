@@ -2,7 +2,6 @@ package com.TDDev.Spring.Boot.Project.configuration;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,12 +21,15 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final String[] PUBLIC_ENDPOINTS = {
+    private static final String[] PUBLIC_ENDPOINTS = {
         "create-user", "auth/login", "auth/introspect", "auth/logout", "auth/refresh-token"
     };
 
-    @Autowired
     CustomJwtDecoder customJwtDecoder;
+
+    public SecurityConfig(CustomJwtDecoder customJwtDecoder){
+        this.customJwtDecoder = customJwtDecoder;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -40,7 +42,6 @@ public class SecurityConfig {
                         .authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    //                    configuration.setAllowedOrigins(List.of("*"));
                     configuration.addAllowedOriginPattern("*");
                     configuration.setAllowedMethods(List.of("*"));
                     configuration.setAllowedHeaders(List.of("*"));
@@ -71,29 +72,6 @@ public class SecurityConfig {
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
         return jwtAuthenticationConverter;
     }
-
-    //    @Bean
-    //    public CorsFilter corsFilter(){
-    //        CorsConfiguration corsConfiguration = new CorsConfiguration();
-    //
-    //        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-    //        corsConfiguration.addAllowedMethod("*");
-    //        corsConfiguration.addAllowedHeader("*");
-    //
-    //        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-    //        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-    //
-    //        return new CorsFilter(urlBasedCorsConfigurationSource);
-    //    }
-
-    //    @Bean
-    //    JwtDecoder jwtDecoder(){
-    //        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
-    //        return NimbusJwtDecoder
-    //                .withSecretKey(secretKeySpec)
-    //                .macAlgorithm(MacAlgorithm.HS512)
-    //                .build();
-    //    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
