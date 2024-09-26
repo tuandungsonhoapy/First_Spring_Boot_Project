@@ -1,17 +1,18 @@
 package com.TDDev.Spring.Boot.Project.configuration;
 
+import static com.TDDev.Spring.Boot.Project.configuration.CookieUtils.getCookieValue;
+
+import java.io.IOException;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-
-import java.io.IOException;
-
-import static com.TDDev.Spring.Boot.Project.configuration.CookieUtils.getCookieValue;
 
 public class JwtCookieFilter implements Filter {
     private final JwtDecoder jwtDecoder;
@@ -28,7 +29,8 @@ public class JwtCookieFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         // Ép kiểu ServletRequest thành HttpServletRequest để xử lý cookie
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;

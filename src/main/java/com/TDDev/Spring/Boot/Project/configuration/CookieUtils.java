@@ -1,9 +1,9 @@
 package com.TDDev.Spring.Boot.Project.configuration;
 
+import java.util.Arrays;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.util.Arrays;
 
 public class CookieUtils {
     public static String getCookieValue(HttpServletRequest request, String cookieName) {

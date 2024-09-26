@@ -5,18 +5,15 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import com.TDDev.Spring.Boot.Project.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.AuthenticationRequest;
-import com.TDDev.Spring.Boot.Project.dto.request.Authentication.IntrospectRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.LogoutRequest.LogoutRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.RefreshTokenRequest.RefreshTokenRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.AuthenticationResponse;
@@ -25,6 +22,7 @@ import com.TDDev.Spring.Boot.Project.entity.InvalidatedToken;
 import com.TDDev.Spring.Boot.Project.entity.User;
 import com.TDDev.Spring.Boot.Project.exception.AppException;
 import com.TDDev.Spring.Boot.Project.exception.ErrorCode;
+import com.TDDev.Spring.Boot.Project.mapper.UserMapper;
 import com.TDDev.Spring.Boot.Project.repository.InvalidatedTokenRepository;
 import com.TDDev.Spring.Boot.Project.repository.UserRepository;
 import com.nimbusds.jose.*;

@@ -1,5 +1,7 @@
 package com.TDDev.Spring.Boot.Project.configuration;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,12 +17,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -37,13 +33,15 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.addFilterBefore(jwtCookieFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
-                .permitAll()
-                .anyRequest()
-                .authenticated())
+        httpSecurity
+                .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                    //                    configuration.setAllowedOrigins(List.of("*"));
+                    configuration.addAllowedOriginPattern("*");
                     configuration.setAllowedMethods(List.of("*"));
                     configuration.setAllowedHeaders(List.of("*"));
                     configuration.setAllowCredentials(true);
@@ -74,19 +72,19 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
-//    @Bean
-//    public CorsFilter corsFilter(){
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//
-//        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-//        corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.addAllowedHeader("*");
-//
-//        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-//
-//        return new CorsFilter(urlBasedCorsConfigurationSource);
-//    }
+    //    @Bean
+    //    public CorsFilter corsFilter(){
+    //        CorsConfiguration corsConfiguration = new CorsConfiguration();
+    //
+    //        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+    //        corsConfiguration.addAllowedMethod("*");
+    //        corsConfiguration.addAllowedHeader("*");
+    //
+    //        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+    //        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+    //
+    //        return new CorsFilter(urlBasedCorsConfigurationSource);
+    //    }
 
     //    @Bean
     //    JwtDecoder jwtDecoder(){

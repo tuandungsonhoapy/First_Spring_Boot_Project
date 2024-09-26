@@ -1,18 +1,16 @@
 package com.TDDev.Spring.Boot.Project.controller;
 
 import java.text.ParseException;
-import java.util.Arrays;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.AuthenticationRequest;
-import com.TDDev.Spring.Boot.Project.dto.request.Authentication.IntrospectRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.LogoutRequest.LogoutRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.RefreshTokenRequest.RefreshTokenRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.ApiResponse;
@@ -24,6 +22,7 @@ import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -34,7 +33,8 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    ApiResponse<AuthenticationResponse> login(@RequestBody AuthenticationRequest request, HttpServletResponse response) {
+    ApiResponse<AuthenticationResponse> login(
+            @RequestBody AuthenticationRequest request, HttpServletResponse response) {
         var result = authenticationService.authenticate(request);
 
         Cookie cookie = new Cookie("identityToken", result.getToken());
