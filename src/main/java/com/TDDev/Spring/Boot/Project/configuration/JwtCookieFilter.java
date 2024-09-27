@@ -8,12 +8,14 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 
+@Slf4j
 public class JwtCookieFilter implements Filter {
     private final JwtDecoder jwtDecoder;
     private final JwtAuthenticationConverter jwtAuthenticationConverter;
@@ -48,7 +50,7 @@ public class JwtCookieFilter implements Filter {
                 // Set Authentication vào SecurityContext
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                // Xử lý lỗi nếu token không hợp lệ (ví dụ: ghi log hoặc tạo phản hồi lỗi)
+                log.info("Error: {}", e.getMessage());
             }
         }
 

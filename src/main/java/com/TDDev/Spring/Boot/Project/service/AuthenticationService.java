@@ -72,6 +72,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
+        log.info("SIGNER_KEY: " + SIGNER_KEY);
         var user = userRepository
                 .findByUsername(authenticationRequest.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));

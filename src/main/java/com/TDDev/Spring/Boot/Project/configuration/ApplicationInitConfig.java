@@ -2,6 +2,8 @@ package com.TDDev.Spring.Boot.Project.configuration;
 
 import java.util.HashSet;
 
+import com.TDDev.Spring.Boot.Project.entity.Role;
+import com.TDDev.Spring.Boot.Project.repository.RoleRepository;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -28,15 +30,37 @@ public class ApplicationInitConfig {
             prefix = "spring",
             value = "datasource.driverClassName",
             havingValue = "com.mysql.cj.jdbc.Driver")
-    ApplicationRunner applicationRunner(UserRepository userRepository) {
+    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
+            if(roleRepository.findById("ADMIN").isEmpty()) {
+                roleRepository.save(Role.builder()
+                                .name("ADMIN")
+                                .description("Admin role")
+                        .build());
+            }
+
+            if(roleRepository.findById("CUSTOMER").isEmpty()) {
+                roleRepository.save(Role.builder()
+                                .name("CUSTOMER")
+                                .description("Customer role")
+                        .build());
+            }
+
+            if(roleRepository.findById("STAFF").isEmpty()) {
+                roleRepository.save(Role.builder()
+                                .name("STAFF")
+                                .description("Staff role")
+                        .build());
+            }
+
             if (userRepository.findByUsername("admin").isEmpty()) {
-                var roles = new HashSet<String>();
+
+
 
                 User user = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("123456"))
-                        //  .roles(roles)
+                        .role(roleRepository.findById("ADMIN").get())
                         .build();
 
                 userRepository.save(user);

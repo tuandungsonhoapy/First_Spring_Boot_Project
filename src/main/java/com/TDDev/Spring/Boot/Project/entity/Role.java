@@ -1,5 +1,6 @@
 package com.TDDev.Spring.Boot.Project.entity;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -27,4 +28,7 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     Set<Permission> permissions;
+
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<User> users;
 }
