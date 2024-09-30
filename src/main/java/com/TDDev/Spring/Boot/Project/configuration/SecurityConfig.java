@@ -22,7 +22,8 @@ import org.springframework.web.cors.CorsConfiguration;
 @EnableMethodSecurity
 public class SecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {
-        "create-user", "auth/login", "auth/introspect", "auth/logout", "auth/refresh-token"
+        "create-user", "auth/login", "auth/introspect", "auth/logout", "auth/refresh-token",
+            "images/static/**"
     };
 
     CustomJwtDecoder customJwtDecoder;
@@ -37,6 +38,8 @@ public class SecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS)
                         .permitAll()
                         .anyRequest()
                         .authenticated())

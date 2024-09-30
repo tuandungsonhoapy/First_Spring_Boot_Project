@@ -1,0 +1,16 @@
+package com.TDDev.Spring.Boot.Project.dto.response;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class ImageResponse {
+    long id;
+    String name;
+    String type;
+    byte[] data;
+}

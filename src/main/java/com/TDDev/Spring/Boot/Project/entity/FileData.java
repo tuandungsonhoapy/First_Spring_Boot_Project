@@ -1,7 +1,6 @@
 package com.TDDev.Spring.Boot.Project.entity;
 
 import jakarta.persistence.*;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,20 +9,17 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "image_data")
+@Table(name = "file_data")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-public class ImageData {
+public class FileData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
     String name;
     String type;
-
-    @Lob
-    @Column(name = "imageData", columnDefinition = "LONGBLOB")
-    byte[] data;
+    String filePath;
 
     @ManyToOne
     @JoinColumn(name = "product_id")

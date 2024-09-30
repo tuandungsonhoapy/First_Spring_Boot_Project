@@ -20,7 +20,8 @@ public enum ErrorCode {
     IMAGE_NOT_EXIST(1011, "Image does not exist!", HttpStatus.BAD_REQUEST),
     PRODUCT_EXISTED(1012, "Product existed!", HttpStatus.BAD_REQUEST),
     SERVER_ERROR(1111, "Server error!", HttpStatus.SERVICE_UNAVAILABLE),
-    ROLE_NOT_EXISTED(1013, "Role does not exist!", HttpStatus.BAD_REQUEST);
+    ROLE_NOT_EXISTED(1013, "Role does not exist!", HttpStatus.BAD_REQUEST),
+    PRODUCT_NOT_FOUND(1014, "Product not found!", HttpStatus.NOT_FOUND),;
     private final int code;
     private final String message;
     private final HttpStatus httpStatus;
