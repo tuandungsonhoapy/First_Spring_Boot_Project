@@ -45,7 +45,7 @@ public class RoleController {
     }
 
     @PatchMapping("/update")
-    ApiResponse<RoleResponse> update(@RequestBody RoleRequest request){
+    ApiResponse<RoleResponse> update(@RequestBody RoleRequest request) {
         return ApiResponse.<RoleResponse>builder()
                 .message("Update role successfully!")
                 .result(roleService.update(request))

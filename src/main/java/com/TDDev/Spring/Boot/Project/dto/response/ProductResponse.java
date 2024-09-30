@@ -1,10 +1,11 @@
 package com.TDDev.Spring.Boot.Project.dto.response;
 
+import java.util.List;
+
 import com.TDDev.Spring.Boot.Project.entity.ImageData;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data
 @Builder

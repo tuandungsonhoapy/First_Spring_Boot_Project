@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     CustomJwtDecoder customJwtDecoder;
 
-    public SecurityConfig(CustomJwtDecoder customJwtDecoder){
+    public SecurityConfig(CustomJwtDecoder customJwtDecoder) {
         this.customJwtDecoder = customJwtDecoder;
     }
 

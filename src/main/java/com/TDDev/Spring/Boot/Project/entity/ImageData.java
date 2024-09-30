@@ -1,6 +1,7 @@
 package com.TDDev.Spring.Boot.Project.entity;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,6 +19,7 @@ public class ImageData {
 
     String name;
     String type;
+
     @Lob
     @Column(name = "imageData")
     byte[] data;

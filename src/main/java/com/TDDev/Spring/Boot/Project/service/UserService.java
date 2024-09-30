@@ -39,12 +39,11 @@ public class UserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        var role = roleRepository.findById("CUSTOMER")
-                .orElseThrow(() -> new AppException(ErrorCode.SERVER_ERROR));
+        var role = roleRepository.findById("CUSTOMER").orElseThrow(() -> new AppException(ErrorCode.SERVER_ERROR));
 
         user.setRole(role);
 
-        try{
+        try {
             user = userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.USER_EXISTED);
@@ -81,7 +80,8 @@ public class UserService {
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        var role = roleRepository.findById(request.getRole())
+        var role = roleRepository
+                .findById(request.getRole())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
         user.setRole(role);
 

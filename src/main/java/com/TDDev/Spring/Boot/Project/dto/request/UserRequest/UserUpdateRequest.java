@@ -1,7 +1,6 @@
 package com.TDDev.Spring.Boot.Project.dto.request.UserRequest;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import com.TDDev.Spring.Boot.Project.validator.DobValidator.DobConstraint;
 

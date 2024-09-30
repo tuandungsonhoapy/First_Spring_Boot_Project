@@ -9,7 +9,9 @@ import com.TDDev.Spring.Boot.Project.dto.request.UserRequest.UserUpdateRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.UserResponse;
 import com.TDDev.Spring.Boot.Project.entity.User;
 
-@Mapper(componentModel = "spring", uses = {RoleMapper.class})
+@Mapper(
+        componentModel = "spring",
+        uses = {RoleMapper.class})
 public interface UserMapper {
 
     User toUser(UserCreationRequest request);

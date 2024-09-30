@@ -18,9 +18,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
 import com.TDDev.Spring.Boot.Project.dto.request.UserRequest.UserCreationRequest;
+import com.TDDev.Spring.Boot.Project.dto.response.RoleResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.UserResponse;
+import com.TDDev.Spring.Boot.Project.entity.Role;
 import com.TDDev.Spring.Boot.Project.entity.User;
 import com.TDDev.Spring.Boot.Project.exception.AppException;
+import com.TDDev.Spring.Boot.Project.exception.ErrorCode;
+import com.TDDev.Spring.Boot.Project.repository.RoleRepository;
 import com.TDDev.Spring.Boot.Project.repository.UserRepository;
 
 @SpringBootTest
@@ -29,6 +33,9 @@ import com.TDDev.Spring.Boot.Project.repository.UserRepository;
 public class UserServiceTest {
     @Autowired
     UserService userService;
+
+    @MockBean
+    private RoleRepository roleRepository;
 
     @MockBean
     private UserRepository userRepository;
@@ -56,6 +63,7 @@ public class UserServiceTest {
                 .firstName("first name test")
                 .lastName("last name test")
                 .dob(dob)
+                .role(RoleResponse.builder().name("CUSTOMER").build())
                 .build();
 
         user = User.builder()
@@ -64,32 +72,38 @@ public class UserServiceTest {
                 .firstName("first name test")
                 .lastName("last name test")
                 .dob(dob)
+                .role(roleRepository
+                        .findById("CUSTOMER")
+                        .orElse(Role.builder().name("CUSTOMER").build()))
                 .build();
     }
 
     @Test
     void createUser_validRequest_success() {
         // Given
-        Mockito.when(userRepository.existsByUsername(anyString())).thenReturn(false);
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+        Mockito.when(roleRepository.findById("CUSTOMER"))
+                .thenReturn(Optional.of(Role.builder().name("CUSTOMER").build()));
 
         // When
         var result = userService.createUser(request);
 
         // Then
-        Assertions.assertThat(result.getId().equals("1ce9ae4a-0973-44a4-82c5-0d0cd8bb4ee8"));
-        Assertions.assertThat(result.getUsername().equals("usertest"));
+        Assertions.assertThat(result.getId()).isEqualTo("1ce9ae4a-0973-44a4-82c5-0d0cd8bb4ee8");
+        Assertions.assertThat(result.getUsername()).isEqualTo("usertest");
     }
 
     @Test
     void createUser_userExisted_fail() {
         // Given
-        Mockito.when(userRepository.existsByUsername(anyString())).thenReturn(true);
+        Mockito.when(userRepository.save(Mockito.any())).thenThrow(new AppException(ErrorCode.USER_EXISTED));
+        Mockito.when(roleRepository.findById("CUSTOMER"))
+                .thenReturn(Optional.of(Role.builder().name("CUSTOMER").build()));
 
         // When
         var exception = assertThrows(AppException.class, () -> userService.createUser(request));
 
-        Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1001);
+        Assertions.assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.USER_EXISTED);
     }
 
     @Test

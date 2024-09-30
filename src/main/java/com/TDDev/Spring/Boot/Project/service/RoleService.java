@@ -51,8 +51,9 @@ public class RoleService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public RoleResponse update(RoleRequest request){
-        var role = roleRepository.findById(request.getName())
+    public RoleResponse update(RoleRequest request) {
+        var role = roleRepository
+                .findById(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
 
         roleMapper.updateRole(role, request);

@@ -11,10 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.TDDev.Spring.Boot.Project.dto.request.Authentication.AuthenticationRequest;
-import com.TDDev.Spring.Boot.Project.dto.request.LogoutRequest.LogoutRequest;
 import com.TDDev.Spring.Boot.Project.dto.request.RefreshTokenRequest.RefreshTokenRequest;
 import com.TDDev.Spring.Boot.Project.dto.response.AuthenticationResponse;
 import com.TDDev.Spring.Boot.Project.dto.response.IntrospectResponse;
@@ -119,7 +117,7 @@ public class AuthenticationService {
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
 
-        if(Objects.nonNull(user.getRole())){
+        if (Objects.nonNull(user.getRole())) {
             stringJoiner.add("ROLE_" + user.getRole().getName());
             user.getRole().getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
         }
